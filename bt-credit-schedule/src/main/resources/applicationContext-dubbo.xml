@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- Dubbo配置 -->
+	<dubbo:application name="bt-credit-schedule" logger="${dubbo.application.logger}"/>
+	<!-- 通过 广播通知所有人-->
+	<dubbo:registry address="${registry.address}" protocol="${registry.protocol}" />
+	<dubbo:protocol name="${protocol.name}" port="${protocol.port}"/>
+	<dubbo:provider filter="-exception" timeout="50000" retries="0"/>
+	<dubbo:consumer retries="0"/>
+
+	<dubbo:reference id="creditReportDomain" interface="com.btjf.credit.report.domain.CreditReportDomain" version="1.0" check="false"/>
+
+	<!-- 远程事件服务-->
+	<dubbo:reference id="eventDelayRuleDomain" interface="com.icar.finance.event.delayrule.domain.EventDelayRuleDomain" version="2.6.9.0" check="false"/>
+	<dubbo:reference id="eventDefineDomain" interface="com.icar.finance.event.define.domain.EventDefineDomain" version="2.6.9.0" check="false"/>
+	<dubbo:reference id="eventExecuteLogDomain" interface="com.icar.finance.event.logger.domain.EventExecuteLogDomain" version="2.6.9.0" check="false"/>
+</beans>
